@@ -17,7 +17,10 @@ def get_all_users():
 
 @app.get("/GET/users/<id>")
 def get_user_by_id(id):
-    return list(filter(lambda user: str(user["id"]) == id, users_db))[0]
+    user = list(filter(lambda user: str(user["id"]) == id, users_db))
+    if len(user) == 0:
+        return {}
+    return user[0]
 
 if __name__ == "__main__":
     app.run("localhost", 3000)
