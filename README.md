@@ -1,0 +1,1 @@
+# operacje_na_bazie_uzytkownikow
