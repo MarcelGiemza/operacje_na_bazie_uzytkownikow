@@ -8,10 +8,10 @@ pip install flask pytest
 | ------- | -------- |
 | GET     | tak      |
 | GET id  | tak      |
-| POST    | nie      |
-| PATCH   | nie      |
-| PUT     | nie      |
-| DELETE  | nie      |
+| POST    | tak      |
+| PATCH   | tak      |
+| PUT     | tak      |
+| DELETE  | tak      |
 
 Proszę napisać aplikację serwerową spełniającą następujące warunki:
 1. Korzysta z protokołu HTTP w wersji 1.1
