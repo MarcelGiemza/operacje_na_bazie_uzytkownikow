@@ -12,7 +12,7 @@ users_db = {
             }
 
 
-def create_user(id, name, lastname):
+def update_users(id, name, lastname):
     users_db.update({
         id: {
         "name": name,
@@ -43,14 +43,27 @@ def users():
                 and data_keys.count("name") == 1\
                 and data_keys.count("lastname") == 1:
             user_ids = [int(id) for id in users_db.keys()]
-            create_user(str(max(user_ids)+1), data["name"], data["lastname"])
+            update_users(str(max(user_ids)+1), data["name"], data["lastname"])
             return Response(status=CREATED)
         return Response(status=CREATE_WRONG_REQUEST)
 
-@app.route("/users/<id>", methods = ["GET"])
+@app.route("/users/<id>", methods = ["GET", "PATCH"])
 def users_id(id):
     if request.method == "GET":
         return users_db[id]
+    if request.method == "PATCH":
+        user = users_db.get(id, False)
+        data = request.get_json()
+        data_keys = tuple(data.keys())
+        if user and len(data_keys) == 1:
+            if data_keys.count("name") == 1:
+                update_users(id, data["name"], user["lastname"])
+                return Response(status=CREATED)
+            if data_keys.count("lastname") == 1:
+                update_users(id, user["name"], data["lastname"])
+                return Response(status=CREATED)
+        return Response(status=CREATE_WRONG_REQUEST)
+
 
 
  
