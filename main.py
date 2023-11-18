@@ -49,7 +49,7 @@ def users():
                 return Response(status=CREATED)
             return Response(status=WRONG_REQUEST)
 
-@app.route("/users/<id>", methods = ["GET", "PATCH", "PUT"])
+@app.route("/users/<id>", methods = ["GET", "PATCH", "PUT", "DELETE"])
 def users_id(id):
     match request.method:
         case "GET":
@@ -77,10 +77,13 @@ def users_id(id):
                     update_users(id, data["name"], data["lastname"])
                     return Response(status=NO_CONTENT)
             return Response(status=WRONG_REQUEST)
+        case "DELETE":
+            user = users_db.get(id, False)
+            if user:
+                users_db.pop(id)
+                return Response(status=NO_CONTENT)
+            return Response(status=WRONG_REQUEST)
 
 
-
-
- 
 if __name__ == "__main__": 
     app.run("localhost", 3000)

@@ -43,3 +43,13 @@ def test_put_wrong():
     client = app.test_client()
     actual = client.put("/users/2", json={})
     assert actual.status_code == WRONG_REQUEST
+
+def test_delete():
+    client = app.test_client()
+    actual = client.delete("/users/2")
+    assert actual.status_code == NO_CONTENT
+
+def test_delete_wrong():
+    client = app.test_client()
+    actual = client.delete("/users/22")
+    assert actual.status_code == WRONG_REQUEST
