@@ -14,7 +14,7 @@ def test_post():
     actual = client.post("/users", json={"name": "test", "lastname": "test"})
     assert actual.status_code == CREATED
 
-def test_pust_wrong():
+def test_post_wrong():
     client = app.test_client()
     actual = client.post("/users", json={"name": "test"})
     assert actual.status_code == WRONG_REQUEST
@@ -32,4 +32,14 @@ def test_patch_lastname():
 def test_patch_wrong():
     client = app.test_client()
     actual = client.patch("/users/1", json={"test": "wrong"})
+    assert actual.status_code == WRONG_REQUEST
+
+def test_put():
+    client = app.test_client()
+    actual = client.put("/users/2", json={"name": "test", "lastname": "test"})
+    assert actual.status_code == NO_CONTENT
+    
+def test_put_wrong():
+    client = app.test_client()
+    actual = client.put("/users/2", json={})
     assert actual.status_code == WRONG_REQUEST

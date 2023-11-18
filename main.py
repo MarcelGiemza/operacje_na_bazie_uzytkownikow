@@ -66,6 +66,18 @@ def users_id(id):
                     update_users(id, user["name"], data["lastname"])
                     return Response(status=NO_CONTENT)
             return Response(status=WRONG_REQUEST)
+        case "PUT":
+            user = users_db.get(id, False)
+            data = request.get_json()
+            data_keys = tuple(data.keys())
+            if user and len(data_keys):
+                if len(data_keys) == 2\
+                        and data_keys.count("name") == 1\
+                        and data_keys.count("lastname") == 1:
+                    update_users(id, data["name"], data["lastname"])
+                    return Response(status=NO_CONTENT)
+            return Response(status=WRONG_REQUEST)
+
 
 
 
