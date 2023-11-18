@@ -2,9 +2,10 @@ from flask import Flask, Response, request
 
 app = Flask(__name__)
 
-CREATED = 201
 OK = 200
-CREATE_WRONG_REQUEST = 400
+CREATED = 201
+NO_CONTENT = 204
+WRONG_REQUEST = 400
 
 users_db = {
     "1": {"name": "Wojciech", "lastname": "Oczkowski"},
@@ -45,7 +46,7 @@ def users():
             user_ids = [int(id) for id in users_db.keys()]
             update_users(str(max(user_ids)+1), data["name"], data["lastname"])
             return Response(status=CREATED)
-        return Response(status=CREATE_WRONG_REQUEST)
+        return Response(status=WRONG_REQUEST)
 
 @app.route("/users/<id>", methods = ["GET", "PATCH"])
 def users_id(id):
@@ -58,11 +59,11 @@ def users_id(id):
         if user and len(data_keys) == 1:
             if data_keys.count("name") == 1:
                 update_users(id, data["name"], user["lastname"])
-                return Response(status=CREATED)
+                return Response(status=NO_CONTENT)
             if data_keys.count("lastname") == 1:
                 update_users(id, user["name"], data["lastname"])
-                return Response(status=CREATED)
-        return Response(status=CREATE_WRONG_REQUEST)
+                return Response(status=NO_CONTENT)
+        return Response(status=WRONG_REQUEST)
 
 
 
