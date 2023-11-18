@@ -13,11 +13,11 @@ users_db = {
 
 
 def create_user(id, name, lastname):
-            users_db.update({
-                id: {
-                "name": name,
-                "lastname": lastname}
-            })
+    users_db.update({
+        id: {
+        "name": name,
+        "lastname": lastname}
+    })
     
 
 @app.get("/")
