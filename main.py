@@ -31,39 +31,41 @@ def ping():
 
 @app.route("/users", methods = ["GET", "POST"])
 def users():
-    if request.method == "GET":
-        return {"users": [{
-            "id": user[0],
-            "name": user[1]["name"],
-            "lastname": user[1]["lastname"],
-        } for user in users_db.items()]}
-    if request.method == "POST":
-        data = request.get_json()
-        data_keys = tuple(data.keys())
-        if len(data_keys) == 2\
-                and data_keys.count("name") == 1\
-                and data_keys.count("lastname") == 1:
-            user_ids = [int(id) for id in users_db.keys()]
-            update_users(str(max(user_ids)+1), data["name"], data["lastname"])
-            return Response(status=CREATED)
-        return Response(status=WRONG_REQUEST)
+    match request.method:
+        case "GET":
+            return {"users": [{
+                "id": user[0],
+                "name": user[1]["name"],
+                "lastname": user[1]["lastname"],
+            } for user in users_db.items()]}
+        case "POST":
+            data = request.get_json()
+            data_keys = tuple(data.keys())
+            if len(data_keys) == 2\
+                    and data_keys.count("name") == 1\
+                    and data_keys.count("lastname") == 1:
+                user_ids = [int(id) for id in users_db.keys()]
+                update_users(str(max(user_ids)+1), data["name"], data["lastname"])
+                return Response(status=CREATED)
+            return Response(status=WRONG_REQUEST)
 
-@app.route("/users/<id>", methods = ["GET", "PATCH"])
+@app.route("/users/<id>", methods = ["GET", "PATCH", "PUT"])
 def users_id(id):
-    if request.method == "GET":
-        return users_db[id]
-    if request.method == "PATCH":
-        user = users_db.get(id, False)
-        data = request.get_json()
-        data_keys = tuple(data.keys())
-        if user and len(data_keys) == 1:
-            if data_keys.count("name") == 1:
-                update_users(id, data["name"], user["lastname"])
-                return Response(status=NO_CONTENT)
-            if data_keys.count("lastname") == 1:
-                update_users(id, user["name"], data["lastname"])
-                return Response(status=NO_CONTENT)
-        return Response(status=WRONG_REQUEST)
+    match request.method:
+        case "GET":
+            return users_db[id]
+        case "PATCH":
+            user = users_db.get(id, False)
+            data = request.get_json()
+            data_keys = tuple(data.keys())
+            if user and len(data_keys) == 1:
+                if data_keys.count("name") == 1:
+                    update_users(id, data["name"], user["lastname"])
+                    return Response(status=NO_CONTENT)
+                if data_keys.count("lastname") == 1:
+                    update_users(id, user["name"], data["lastname"])
+                    return Response(status=NO_CONTENT)
+            return Response(status=WRONG_REQUEST)
 
 
 
